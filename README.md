@@ -1,313 +1,248 @@
-# Experiment--05-4X4-keypad-interface-with-LPC2148
-
-Name :SOUVIK KUNDU
-
-Roll no : 212221230105
-
-Date of experiment :01-11-2022
-
- 
-### Interfacing a 4X4 keypad LPC2148 ARM 7 Microcontroller 
-
-## Aim: To Interface 4x4 keypad interface  LPC2148 ARM 7 and write a code for displaying the inputs on a 16x2 lcd 
-## Components required: Proteus ISIS professional suite, Kiel μ vision 5 Development environment 
-## Theory 
-The full form of an ARM is an advanced reduced instruction set computer (RISC) machine, and it is a 32-bit processor architecture expanded by ARM holdings. The applications of an ARM processor include several microcontrollers as well as processors. The architecture of an ARM processor was licensed by many corporations for designing ARM processor-based SoC products and CPUs. This allows the corporations to manufacture their products using ARM architecture. Likewise, all main semiconductor companies will make ARM-based SOCs such as Samsung, Atmel, TI etc.
-
-What is an ARM7 Processor?
-ARM7 processor is commonly used in embedded system applications. Also, it is a balance among classic as well as new-Cortex sequence. This processor is tremendous in finding the resources existing on the internet with excellence documentation offered by NXP Semiconductors. It suits completely for an apprentice to obtain in detail hardware & software design implementation.
-LPC2148 Microcontroller
- The LPC2148 microcontroller is designed by Philips (NXP Semiconductor) with several in-built features & peripherals. Due to these reasons, it will make more reliable as well as the efficient option for an application developer. LPC2148 is a 16-bit or 32-bit microcontroller based on ARM7 family.
-Features of LPC2148
-The main features of LPC2148 include the following.
-•	The LPC2148 is a 16 bit or 32 bit ARM7 family based microcontroller and available in a small LQFP64 package.
-•	ISP (in system programming) or IAP (in application programming) using on-chip boot loader software.
-•	On-chip static RAM is 8 kB-40 kB, on-chip flash memory is 32 kB-512 kB, the wide interface is 128 bit, or accelerator allows 60 MHz high-speed operation.
-•	It takes 400 milliseconds time for erasing the data in full chip and 1 millisecond time for 256 bytes of programming.
-•	Embedded Trace interfaces and Embedded ICE RT offers real-time debugging with high-speed tracing of instruction execution and on-chip Real Monitor software.
-•	It has 2 kB of endpoint RAM and USB 2.0 full speed device controller. Furthermore, this microcontroller offers 8kB on-chip RAM nearby to USB with DMA.
-•	One or two 10-bit ADCs offer 6 or 14 analogs i/ps with low conversion time as 2.44 μs/ channel.
-•	Only 10 bit DAC offers changeable analog o/p.
-•	External event counter/32 bit timers-2, PWM unit, & watchdog.
-•	Low power RTC (real time clock) & 32 kHz clock input.
-•	Several serial interfaces like two 16C550 UARTs, two I2C-buses with 400 kbit/s speed.
-•	5 volts tolerant quick general purpose Input/output pins in a small LQFP64 package.
-•	Outside interrupt pins-21.
-•	60 MHz of utmost CPU CLK-clock obtainable from the programmable-on-chip phase locked loop by resolving time is 100 μs.
-•	The incorporated oscillator on the chip will work by an exterior crystal that ranges from 1 MHz-25 MHz
-•	The modes for power-conserving mainly comprise idle & power down.
-•	For extra power optimization, there are individual enable or disable of peripheral functions and peripheral CLK scaling.
  
 
-## 4x4 keypad 
 
- ![image](https://user-images.githubusercontent.com/36288975/198944736-c16e2134-193e-4810-a21e-1256c6eefc2d.png)
+### Ex. No. :7
+## Date: 07-11-2022
+### Interfacing LM35 Temperature sensor and calculate the sensitivity of the output
 
-![image](https://user-images.githubusercontent.com/36288975/198944763-4db22ff4-63df-438a-a27e-9b90aed8eaf0.png)
-
-
-
- ![image](https://user-images.githubusercontent.com/36288975/198944803-b9298867-c5f1-4167-98f8-f17a6bab5ffe.png)
-
-
-•	STEP1: First set all ROWS to OUTPUT and set them at +5V. Next set all COLUMNS as INPUT to sense the HIGH logic. Now consider a button is pressed on keypad. And that key is at 2ND COLUMN and 3rd ROW.
+## Aim: 
+To configure internal ADC for   LPC2148 ARM 7  for interfacing LM35 temperature sensor.
+## Components required:
+Proteus ISIS professional suite, Kiel μ vision 5 Development environment 
+ ![image](https://user-images.githubusercontent.com/36288975/200110365-9e1f8a55-c943-43f1-94de-60003f6308b7.png)
+  
+Figure-01 ADC pins in LPC2148 ARM 7 controller 
+ ## Theory 
+Analog to Digital Converter (ADC) is used to convert analog signal into digital form. LPC2148 has two inbuilt 10-bit ADC i.e. ADC0 & ADC1.
+•	ADC0 has 6 channels &ADC1 has 8 channels.
+•	Hence, we can connect 6 distinct types of input analog signals to ADC0 and 8 distinct types of input analog signals to ADC1.
+•	ADCs in LPC2148 use Successive Approximation technique to convert analog signal into digital form.
+•	This Successive Approximation process requires a clock less than or equal to 4.5 MHz. We can adjust this clock using clock divider settings.
+•	Both ADCs in LCP2148 convert analog signals in the range of 0V to VREF (typically 3V; not to exceed VDDA voltage level).
+AD0.1:4, AD0.6:7 & AD1.7:0 (Analog Inputs)
+These are Analog input pins of ADC. If ADC is used, signal level on analog pins must not be above the level of VDDA; otherwise, ADC readings will be invalid. If ADC is not used, then the pins can be used as 5V tolerant digital I/O pins.
+VREF (Voltage Reference)
+Provide Voltage Reference for ADC.
+VDDA& VSSA (Analog Power and Ground)
+These are the power and ground pins for ADC. These should be same as VDD & VSS.
  
-•	With the button being pressed the current flows as shown in figure. With that a voltage of +5V appears at terminal C2. Since the COLUMN pins are set as INPUTS, the controller can sense C2 going high. The controller can be programmed to remember that C2 going high and the button pressed is in C2 COLUMN.
+Let’s see the ADC registers which are used to control and monitors the ADC operation.
+Here, we will see ADC0 registers and their configurations. ADC1 has similar registers and can be configured in a similar manner.
  
-•	STEP2: Next set all COLUMNS to OUTPUT and set them at +5V. Next set all ROWS as INPUT to sense the HIGH logic. Since the key pressed is at 2ND COLUMN and 3rd ROW. The current flows as shown below.
+ADC0 Registers 
+1.  AD0CR (ADC0 Control Register)
+•	AD0CR is a 32-bit register.
+•	This register must be written to select the operating mode before A/D conversion can occur.
+•	It is used for selecting channel of ADC, clock frequency for ADC, number of clocks or number of bits in result, start of conversion and few other parameters.
+  
+  ![image](https://user-images.githubusercontent.com/36288975/200110376-4ff1ebad-b324-4b8f-8797-ea834763ace4.png)
+Figure-02 AD0CR (ADC0 Control Register)
+•	Bits 7:0 – SEL
+These bits select ADC0 channel as analog input. In software-controlled mode, only one of these bits should be 1.e.g. bit 7 (10000000) selects AD0.7 channel as analog input.
+•	Bits 15:8 – CLKDIV
+The APB(ARM Peripheral Bus)clock is divided by this value plus one, to produce the clock for ADC.
+This clock should be less than or equal to 4.5MHz.
+•	Bit 16 – BURST
+0 = Conversions are software controlled and require 11 clocks
+1 = In Burst mode ADC does repeated conversions at the rate selected by the CLKS field for the analog inputs selected by SEL field. It can be terminated by clearing this bit, but the conversion that is in progress will be completed.
+When Burst = 1, the START bits must be 000, otherwise the conversions will not start.
+•	Bits 19:17 – CLKS
+Selects the number of clocks used for each conversion in burst mode and the number of bits of accuracy of Result bits of AD0DR.
+e.g. 000 uses 11 clocks for each conversion and provide 10 bits of result in corresponding ADDR register.
+000 = 11 clocks / 10 bits
+001 = 10 clocks / 9 bits
+010 = 9 clocks / 8 bits
+011 = 8 clocks / 7 bits
+100 = 7 clocks / 6 bits
+101 = 6 clocks / 5 bits
+110 = 5 clocks / 4 bits
+111 = 4 clocks / 3 bits
+•	Bit 20 – RESERVED
+•	Bit 21 – PDN
+0 = ADC is in Power Down mode
+1 = ADC is operational
+•	Bit 23:22 – RESERVED
+•	Bit 26:24 – START
+When BURST bit is 0, these bits control whether and when A/D conversion is started
+000 = No start (Should be used when clearing PDN to 0)
+001 = Start conversion now
+010 = Start conversion when edge selected by bit 27 of this register occurs on CAP0.2/MAT0.2 pin
+011= Start conversion when edge selected by bit 27 of this register occurs on CAP0.0/MAT0.0 pin
+100 = Start conversion when edge selected by bit 27 of this register occurs on MAT0.1 pin
+101 = Start conversion when edge selected by bit 27 of this register occurs on MAT0.3 pin
+110 = Start conversion when edge selected by bit 27 of this register occurs on MAT1.0 pin
+111 = Start conversion when edge selected by bit 27 of this register occurs on MAT1.1 pin
+•	Bit 27 – EDGE
+This bit is significant only when the Start field contains 010-111. In these cases,
+0 = Start conversion on a rising edge on the selected CAP/MAT signal
+1 = Start conversion on a falling edge on the selected CAP/MAT signal
+•	Bit 31:28 – RESERVED
+2.  AD0GDR (ADC0 Global Data Register)
+•	AD0GDR is a 32-bit register.
+•	This register contains the ADC’s DONE bit and the result of the most recent A/D conversion.
+ ![image](https://user-images.githubusercontent.com/36288975/200110379-2aead4f2-392c-491d-9ec8-1c6b33e4ab1a.png)
 
-![image](https://user-images.githubusercontent.com/36288975/198944818-632726a7-c582-45b5-9ea0-97d2d0b07939.png)
 
-With that current flow a positive voltage of +5V appears at R3 pin. Since all ROWS are set as INPUTS, the controller can sense +5V at R3 pin. The controller can be programmed to remember the key being pressed at third ROW of KEYPAD MATRIX.
-![image](https://user-images.githubusercontent.com/36288975/198944848-bc93731c-dc7d-4e33-b32e-14d4c84c5a0b.png)
+Figure-03 AD0GDR (ADC0 Global Data Register)
+•	Bit 5:0 – RESERVED
+•	Bits 15:6 – RESULT
+When DONE bit is set to 1, this field contains 10-bit ADC result that has a value in the range of 0 (less than or equal to VSSA) to 1023 (greater than or equal to VREF).
+•	Bit 23:16 – RESERVED
+•	Bits 26:24 – CHN
+These bits contain the channel from which ADC value is read.
+e.g. 000 identifies that the RESULT field contains ADC value of channel 0.
+•	Bit 29:27 – RESERVED
+•	Bit 30 – Overrun
+This bit is set to 1 in burst mode if the result of one or more conversions is lost and overwritten before the conversion that produced the result in the RESULT bits.
+This bit is cleared by reading this register.
+•	Bit 31 – DONE
+This bit is set to 1 when an A/D conversion completes. It is cleared when this register is read and when the AD0CR is written.
+If AD0CR is written while a conversion is still in progress, this bit is set and new conversion is started.
+ 
+3.  ADGSR (A/D Global Start Register)
+•	ADGSR is a 32-bit register.
+•	Software can write to this register to simultaneously start conversions on both ADC.
+ ![image](https://user-images.githubusercontent.com/36288975/200110382-0d5ab0b1-4220-45e0-b87b-aa8351086222.png)
 
-•	From previous step, we have known the COLUMN number of key pressed and now we know ROW number. With that we can match the key being pressed. We can take the key INPUT provided by this way for 4X4
-•	
+  Figure-04 ADGSR (A/D Global Start Register)
+•	BURST (Bit 16), START (Bit <26:24>) & EDGE (Bit 27)
+These bits have same function as in the individual ADC control registers i.e. AD0CR & AD1CR. Only difference is that we can use these function for both ADC commonly from this register.
+ 
+4.  AD0STAT (ADC0 Status Register)
+•	AD0STAT is a 32-bit register.
+•	It allows checking of status of all the A/D channels simultaneously.
+![image](https://user-images.githubusercontent.com/36288975/200110390-7eb46ad2-5aed-4a5e-8512-f9791e064728.png)
+
+  Figure-05 AD0STAT (ADC0 Status Register)
+•	Bit 7:0 – DONE7:DONE0
+These bits reflect the DONE status flag from the result registers for A/D channel 7 - channel 0.
+•	Bit 15:8 – OVERRUN7:OVERRUN0
+These bits reflect the OVERRUN status flag from the result registers for A/D channel 7 - channel 0.
+•	Bit 16 – ADINT
+This bit is 1 when any of the individual A/D channel DONE flags is asserted and enables ADC interrupt if any of interrupt is enabled in AD0INTEN register.
+•	Bit 31:17 – RESERVED
+ 
+5.  AD0INTEN (ADC0 Interrupt Enable)
+•	AD0INTEN is a 32-bit register.
+•	It allows control over which channels generate an interrupt when conversion is completed.
+ 
+ ![image](https://user-images.githubusercontent.com/36288975/200110394-8660725a-083b-43aa-9fb9-b92cb8b7c53d.png)
+
+ Figure-06 AD0INTEN (ADC0 Interrupt Enable)
+•	Bit 0 – ADINTEN0
+0 = Completion of a A/D conversion on ADC channel 0 will not generate an interrupt
+1 = Completion of a conversion on ADC channel 0 will generate an interrupt
+•	Remaining ADINTEN bits have similar description as given for ADINTEN0.
+•	Bit 8 – ADGINTEN
+0 = Only the individual ADC channels enabled by ADINTEN7:0 will generate interrupts
+1 = Only the global DONE flag in A/D Data Register is enabled to generate an interrupt
+ 
+6.  AD0DR0-AD0DR7 (ADC0 Data Registers)
+•	These are 32-bit registers.
+•	They hold the result when A/D conversion is completed.
+•	They also include flags that indicate when a conversion has been completed and when a conversion overrun has occurred.
+![image](https://user-images.githubusercontent.com/36288975/200110398-289fff28-16a8-4b5a-a691-d43f8a746acc.png)
+
+  Figure-07 AD0 Data Registers Structure
+•	Bit 5:0 – RESERVED
+•	Bits 15:6 – RESULT
+When DONE bit is set to 1, this field contains 10-bit ADC result that has a value in the range of 0 (less than or equal to VSSA) to 1023 (greater than or equal to VREF).
+•	Bit 29:16 – RESERVED
+•	Bit 30 – Overrun
+This bit is set to 1 in burst mode if the result of one or more conversions is lost and overwritten before the conversion that produced the result in the RESULT bits.
+This bit is cleared by reading this register.
+•	Bit 31 – DONE
+This bit is set to 1 when an A/D conversion completes. It is cleared when this register is read.
+ 
+
 
 Procedure:
-For creation of project on    Kiel μ vision 5 Development environment (LPC21 XX/48/38)
-1.	Click on the menu Project — New µVision Project creates a new project. Select an empty folder and enter the project name, for example Project1. It is good practice to use a separate folder for each project.
-2.	Next, the dialog Select Device for Target opens.
+Steps for Analog to Digital Conversion
+1.	Configure the ADxCR (ADC Control Register) according to the need of application.
+2.	Start ADC conversion by writing appropriate value to START bits in ADxCR. (Example, writing 001 to START bits of the register 26:24, conversion is started immediately).
+3.	Monitor the DONE bit (bit number 31) of the corresponding ADxDRy (ADC Data Register) till it changes from 0 to 1. This signals completion of conversion. We can also monitor DONE bit of ADGSR or the DONE bit corresponding to the ADC channel in the ADCxSTAT register.
+4.	Read the ADC result from the corresponding ADC Data Register.
+ADxDRy. E.g. AD0DR1 contains ADC result of channel 1 of ADC0.
 
- ![image](https://user-images.githubusercontent.com/36288975/198944870-21526748-6345-436d-89c5-07b3902775b0.png)
+LM35 :
+•	LM35 is a temperature measuring device having an analog output voltage proportional to the temperature.
+•	It provides output voltage in Centigrade (Celsius). It does not require any external calibration circuitry.
+•	The sensitivity of LM35 is 10 mV/degree Celsius. As temperature increases, output voltage also increases.
+            E.g. 250 mV means 25°C.
+•	It is a 3-terminal sensor used to measure surrounding temperature ranging from -55 °C to 150 °C.
+•	LM35 gives temperature output which is more precise than thermistor output.
+ ![image](https://user-images.githubusercontent.com/36288975/200110411-f6488eeb-39e9-4876-b5c5-c1ebba612137.png)
 
-
-Figure -01 Target selection
-Select the device database. Default is Software Packs. You can have various local device databases, which show up in the drop-down box. For legacy devices (Arm7, Arm9), use the Legacy Device Database [no RTE]
-3.	Select the device for your application. This selection defines essential tool settings such as compiler controls, the memory layout for the linker, and the Flash programming algorithms.
-4.	Click OK.
-5.	Click on the new file option and save the file using save option with .C extension 
-6.	Build all for the hex code in the output of the target
-
-
-
-For creating the simulation environment in Proteus suite 
-Starting New Design
-Step 1: Open ISIS software and select New design in  File menu
- ![image](https://user-images.githubusercontent.com/36288975/198944893-b936195d-2850-4543-b255-f4d2f8147e4d.png)
-
-Figure -02 Proteus File Menu
-
- Step 2: A dialogue box appears to save the current design. However, we are creating a new design file so you can click Yes or No depending on the content of the present file. Then a Pop-Up appears asking to select the template. It is similar to selecting the paper size while printing. For now select default or according to the layout size of the circuit..
- ![image](https://user-images.githubusercontent.com/36288975/198944918-be6a0e5d-e52b-4cff-beb2-0b9f7cabe175.png)
-  
-  Figure -03 Proteus Default Template Select
+Features of LM35
+Calibrated Directly in Celsius (Centigrade)
+Linear + 10-mV/°C Scale Factor
+0.5°C Ensured Accuracy (at 25°C)
+Rated for Full −55°C to 150°C Range
+Suitable for Remote Applications
+Low-Cost Due to Wafer-Level Trimming
+Operates From 4 V to 30 V
+Less Than 60-μA Current Drain
+Low Self-Heating, 0.08°C in Still Air
+Non-Linearity Only ±¼°C Typical
+Low-Impedance Output, 0.1 Ω for 1-mA Load
  
-Step 3:An untitled design sheet will be opened, save it according to your wish,it is better to create a new folder for every layout as it generates other files supporting your design. However,it is not mandatory.
-  Figure -04 Proteus Design Sheet
- ![image](https://user-images.githubusercontent.com/36288975/198944933-084a499d-efc3-43ef-ac86-08c7ba3fbf99.png)
 
-Step 4:To Select components, Click on the component mode button.
- ![image](https://user-images.githubusercontent.com/36288975/198944943-d240ac7b-287a-4a64-9be2-2c2344e9f5cd.png)
-  
-Figure -05 Component Mode
-Step 5:Click On Pick from Libraries. It shows the categories of components available and a search option to enter the part name.
- ![image](https://user-images.githubusercontent.com/36288975/198944962-b752aa86-f4e7-47fe-8cca-434d65eb6462.png)
+![image](https://user-images.githubusercontent.com/36288975/200110416-9cd78fa3-d1d3-45b5-a2e7-0f304bb32cd6.png)
 
-  Figure -06 Pick from Libraries
+Figure -08 Circuit diagram of interfacing an LM35  with ADC input pin 
 
-Step 6: Select the components from categories or type the part name in Keywords text box.
- Place all the required components and route the wires i.e, make connections.
-Either selection mode above the component mode or component mode allows to connect through wires. Left click from one terminal to other to make connection. Double right-click on the connected wire or the component to remove connection or the component respectively.
- ![image](https://user-images.githubusercontent.com/36288975/198944983-d2b555d8-6094-431a-ab95-12f693137b9f.png)
+## Kiel - Program :
 
- Figure -07 Component Properties Selection
-Double click on the component to edit the properties of the components and click on Ok.
-Step 8: Select ARM microcontroller form the library – pick part 
- ![image](https://user-images.githubusercontent.com/36288975/198944993-d9480186-2d50-405f-9d81-c425944445c3.png)
-
-Figure -08 LPC2138/48 selection
-Step 7:
-
-After making necessary connections click on debug from 
- Figure -09 Keywords Textbox
-Example shows selection of push button. Select the components accordingly.
- ![image](https://user-images.githubusercontent.com/36288975/198945018-ddc37b08-f4b0-4a99-99cc-378202d3735e.png)
-
- Figure -09 Push Button Selection
-Step 8: The selected components will appear in the devices list. Select the component and place it in the design sheet by left-click., post which select all the associated components as shown in the circuit diagram below.
+#include<lpc214x.h>
+#include "LCD.h"
+#include "ADC.h"
+int main()
+{
+	IO1DIR=0xffffffff;
+	IO0DIR=0x00000000;
+	PINSEL0=0x0300;
+	VPBDIV=0x02;
+	lcd_init();
+	show(" ADC Value: ");
+	while(1){
+		cmd(0x8b);
+		val=adc(0,6);
+		dat((val/1000)+48);
+		dat(((val/100)%10)+48);
+		dat(((val/10)%10)+48);
+		dat((val%10)+48);
+	}
+}
  
-![image](https://user-images.githubusercontent.com/36288975/198945047-9ef54f44-c4df-46f1-970a-f168330a7048.png)
+## Tabulations and graph 
+Calculation of sensitivity 
+% of sensitivity is   S=  (T2-T1)/(A2-A1)*100
 
-
-Figure -10 Circuit diagram of4X4 keypad and  16x2 LCD interface with LPC2148/38
-![image](https://user-images.githubusercontent.com/36288975/198945057-7c3a4172-e4d6-4797-9c75-f4f5d0de2797.png)
-
-
- 
-Figure -11 Hex file for simulation 
-
-Step 9: Select the hex file from the Kiel program folder and import the program in to the microcontroller as shown in figure 11 ,  debug and if no errors in connections are found, run the VSM simulation to view the output.
-
-
-## Kiel - Program:
-
-```
-
-#include <lpc21xx.h> 
-#define RS (1<<0)
-#define RW (1<<1)
-#define E (1<<2)
-
-void LCD_command(unsigned char command);
-void  delay_ms(unsigned char time);
-void LCD_data(unsigned char data);
-void LCD_init() ;
-
-
-int main(void)
-{
- //PINSEL1 = 0x00000000;  //Configure PORT0 as GPIO
- //PINSEL2 = 0X00000000;  //Configure PORT1 as GPIO
- IODIR1= 0x00780000; //Configure P1.18, P1.17, P1.16 as output(for rows and column)
- IODIR0= 0x00FF0007;  //Configure P0.23 - P0.16 as output for lcd data & P0.0,P0.1,P0.2 for lcd control lines.
- LCD_init();    //Initialize LCD 16x2
- LCD_command(0x01); 
- while(1)
-   {
-      IOCLR1|=(1<<19);               //Making row1 LOW
-      IOSET1|=(1<<20)|(1<<21)|(1<<22); //Making rest of the rows '1'
-      if(!(IOPIN1&(1<<16)))             //Scan for key press
-       {
-        while(!(IOPIN1&(1<<16)));
-        LCD_data('1');                          
-       }
-      if(!(IOPIN1&(1<<17)))
-       {
-         while(!(IOPIN1&(1<<17)));
-          LCD_data('2'); 
-       }
-      if(!(IOPIN1&(1<<18)))
-       {
-         while(!(IOPIN1&(1<<18)));
-          LCD_data('3'); 
-       }
-      IOCLR1|=(1<<20);
-      IOSET1|=(1<<21)|(1<<22)|(1<<19);
-      if(!(IOPIN1&(1<<16)))
-{
-        while(!(IOPIN1&(1<<16)));
-         LCD_data('4'); 
-      }
-      if(!(IOPIN1&(1<<17)))
-{
-        while(!(IOPIN1&(1<<17)));
-         LCD_data('5'); 
-     }
-      if(!(IOPIN1&(1<<18)))
-{
-        while(!(IOPIN1&(1<<18)));
-         LCD_data('6'); 
-     }
-      IOCLR1|=(1<<21);
-      IOSET1|=(1<<22)|(1<<20)|(1<<19);
-      if(!(IOPIN1&(1<<16)))
-{
-        while(!(IOPIN1&(1<<16)));
-         LCD_data('7'); 
-     }
-      if(!(IOPIN1&(1<<17)))
-{
-       while(!(IOPIN1&(1<<17)));
-        LCD_data('8'); 
-    }
-      if(!(IOPIN1&(1<<18)))
-{
-        while(!(IOPIN1&(1<<18)));
-         LCD_data('9'); 
-}
-      IOCLR1|=(1<<22);
-      IOSET1|=(1<<19)|(1<<20)|(1<<21);
-      if(!(IOPIN1&(1<<16)))
-{
-        while(!(IOPIN1&(1<<16)));
-         LCD_data('*'); 
-}
-      if(!(IOPIN1&(1<<17)))
-{
-        while(!(IOPIN1&(1<<17)));
-         LCD_data('0'); 
-}
-      if(!(IOPIN1&(1<<18)))
-{
-        while(!(IOPIN1&(1<<18)));
-         LCD_data('#'); 
-} 
-   }
-}
-
-
-//Function to generate software delay
-//Calibrated to 1ms
-void  delay_ms(unsigned char time)    
-{  
- unsigned int  i, j;
- for (j=0; j<time; j++)
- {
-  for(i=0; i<8002; i++)
-  {
-  }
-}
-}
-
-void LCD_command(unsigned char command)
-{
- IOCLR0 = 0xFF<<16; // Clear LCD Data lines
- IOCLR0=RS;     // RS=0 for command
- IOCLR0=RW;     // RW=0 for write
- IOSET0=command<<16; // put command on data line
- IOSET0=E;   // en=1 
- delay_ms(10) ;   // delay
- IOCLR0=E;    // en=0
-}
-
-void LCD_data(unsigned char data)
-{
- IOCLR0 = 0xFF<<16; // Clear LCD Data lines
- IOSET0=RS;     // RS=1 for data
- IOCLR0=RW;     // RW=0 for write
- IOSET0= data<<16;  // put command on data line
- IOSET0=E;   //en=1 
- delay_ms(10) ;    //delay
- IOCLR0=E;   //en=0
- }
-
-void LCD_init()
-{
- LCD_command(0x38); //8bit mode and 5x8 dotes (function set)
- delay_ms(10) ;   // delay
- LCD_command(0x0c); //display on, cursor off, cursor char blinking off(display on/off)
- delay_ms(10) ;   // delay
-    LCD_command(0x0e);  //cursor increment and display shift(entry mode set)
-    delay_ms(10) ;   // delay
- LCD_command(0x01);  //clear lcd (clear command)
- delay_ms(10) ;   // delay
- LCD_command(0x80); 
-  delay_ms(10) ;//set cursor to 0th location�1st�lne
-�
-}
-
-```
-
-
-### Output screen shots :
-
-Before simulation:
-
+SL NO	Temperature value in °C (T)	ADC VALUE (A)	Sensitivity 
 ![OUTPUT](1.png)
 
-After simulation:
 
-![output](2.png)
+ 
+Figure -09 graph between temperature values and ADC output 
+![OUTPUT](2.png)
 
-Layout diagram:
-
-![output](3.png)
 ## Result :
-Interfacing a keypad 4x4 is interfaced  with LPC2148
+Temperature sensor LM35 is interfaced to LPC2148 and its output is measured 
+
+## Output screen shots :
+
+Display Off:
+![output](3.png)
+
+display on:
+![output](4.png)
+
+Layout Diagram:
+![output](5.png)
 
 
-
+## Result:
+Temperature sensor LM35 is interfaced to LPC2148 and its output is measured 
 
 
 
